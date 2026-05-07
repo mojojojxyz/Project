@@ -45,7 +45,7 @@ graph TD
 
 ---
 
-### 3.1 [Node.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/Node.java) — โหนดของ Binary Tree
+### 3.1 [Node.java] — โหนดของ Binary Tree
 
 > [!NOTE]
 > เป็นหน่วยพื้นฐานของ Decision Tree ทุกโหนดเก็บข้อมูล 1 อย่าง (คำถามหรือชื่ออาชีพ)
@@ -67,7 +67,7 @@ graph TD
 
 ---
 
-### 3.2 [DecisionTree.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/DecisionTree.java) — จัดการ Binary Decision Tree
+### 3.2 [DecisionTree.java] — จัดการ Binary Decision Tree
 
 > [!NOTE]
 > เป็น wrapper class ที่เก็บ root ของ Tree
@@ -79,7 +79,7 @@ graph TD
 
 ---
 
-### 3.3 [DataLoader.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/DataLoader.java) — สร้าง Tree เริ่มต้น (20 อาชีพ)
+### 3.3 [DataLoader.java] — สร้าง Tree เริ่มต้น (20 อาชีพ)
 
 > [!NOTE]
 > สร้าง Decision Tree แบบ Hardcoded ที่มี 20 อาชีพ ความลึก 7-10 ระดับ
@@ -128,7 +128,7 @@ ROOT: "Prefer building software and writing code over managing infrastructure?"
 
 ---
 
-### 3.4 [UndoStack.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/UndoStack.java) — Stack สำหรับ Undo
+### 3.4 [UndoStack.java] — Stack สำหรับ Undo
 
 > [!IMPORTANT]
 > เขียนเองทั้งหมดโดยใช้ Linked List ภายใน **ไม่ใช้ java.util.Stack**
@@ -152,7 +152,7 @@ ROOT: "Prefer building software and writing code over managing infrastructure?"
 
 ---
 
-### 3.5 [GameEngine.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/GameEngine.java) — ศูนย์กลางการแนะนำอาชีพ
+### 3.5 [GameEngine.java] — ศูนย์กลางการแนะนำอาชีพ
 
 > [!NOTE]
 > ไฟล์ที่ควบคุม flow ทั้งหมด ตั้งแต่ welcome จนถึง farewell
@@ -192,7 +192,7 @@ ROOT: "Prefer building software and writing code over managing infrastructure?"
 
 ---
 
-### 3.6 [Main.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/Main.java) — จุดเริ่มต้นโปรแกรม
+### 3.6 [Main.java] — จุดเริ่มต้นโปรแกรม
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
