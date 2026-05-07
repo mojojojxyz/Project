@@ -1,87 +1,77 @@
 /**
  * Represents a single node in the Binary Decision Tree.
- * Each node holds either a Yes/No question (internal node) or
- * a career name (leaf node).
- *
- * Internal nodes have both yesNode and noNode children.
- * Leaf nodes have no children and represent a final career prediction.
+ * Internal nodes hold Yes/No questions; leaf nodes hold a career name,
+ * description, and type (เคะ/เมะ).
  */
 public class Node {
     private String data;
     private Node yesNode;
     private Node noNode;
+    private String description;
+    private String type; // "เคะ" or "เมะ" for leaf nodes
 
     /**
-     * Constructs a new Node with the given data.
-     * Initially, the node has no children and is treated as a leaf.
+     * Constructs a question (internal) node with only data.
      *
-     * @param data the question text (for internal nodes) or career name (for leaf nodes)
+     * @param data the question text
      */
     public Node(String data) {
         this.data = data;
         this.yesNode = null;
         this.noNode = null;
+        this.description = "";
+        this.type = "";
     }
 
     /**
-     * Returns the data stored in this node.
+     * Constructs a career (leaf) node with data, description, and type.
      *
-     * @return the question or career name
+     * @param data        the career name
+     * @param description short description of the career
+     * @param type        "เคะ" or "เมะ"
      */
-    public String getData() {
-        return data;
-    }
-
-    /**
-     * Sets the data of this node.
-     *
-     * @param data the new question or career name
-     */
-    public void setData(String data) {
+    public Node(String data, String description, String type) {
         this.data = data;
+        this.yesNode = null;
+        this.noNode = null;
+        this.description = description;
+        this.type = type;
     }
 
-    /**
-     * Returns the child node reached by answering "Yes".
-     *
-     * @return the yes-branch child node, or null if this is a leaf
-     */
-    public Node getYesNode() {
-        return yesNode;
-    }
+    /** @return the question or career name */
+    public String getData() { return data; }
+
+    /** @param data the new question or career name */
+    public void setData(String data) { this.data = data; }
+
+    /** @return the yes-branch child node */
+    public Node getYesNode() { return yesNode; }
+
+    /** @param yesNode the node to set as the yes-child */
+    public void setYesNode(Node yesNode) { this.yesNode = yesNode; }
+
+    /** @return the no-branch child node */
+    public Node getNoNode() { return noNode; }
+
+    /** @param noNode the node to set as the no-child */
+    public void setNoNode(Node noNode) { this.noNode = noNode; }
+
+    /** @return career description (leaf nodes only) */
+    public String getDescription() { return description; }
+
+    /** @param description the career description */
+    public void setDescription(String description) { this.description = description; }
+
+    /** @return "เคะ" or "เมะ" (leaf nodes only) */
+    public String getType() { return type; }
+
+    /** @param type "เคะ" or "เมะ" */
+    public void setType(String type) { this.type = type; }
 
     /**
-     * Sets the child node for the "Yes" branch.
+     * A leaf node has no children and represents a career answer.
      *
-     * @param yesNode the node to set as the yes-child
-     */
-    public void setYesNode(Node yesNode) {
-        this.yesNode = yesNode;
-    }
-
-    /**
-     * Returns the child node reached by answering "No".
-     *
-     * @return the no-branch child node, or null if this is a leaf
-     */
-    public Node getNoNode() {
-        return noNode;
-    }
-
-    /**
-     * Sets the child node for the "No" branch.
-     *
-     * @param noNode the node to set as the no-child
-     */
-    public void setNoNode(Node noNode) {
-        this.noNode = noNode;
-    }
-
-    /**
-     * Determines whether this node is a leaf (career answer) node.
-     * A leaf node has no children.
-     *
-     * @return true if this node has no children, false otherwise
+     * @return true if this node has no children
      */
     public boolean isLeaf() {
         return yesNode == null && noNode == null;

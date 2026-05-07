@@ -2,50 +2,42 @@
 
 ## 1. ภาพรวมของโปรแกรม
 
-**The Career Path Oracle** เป็นเกมทายอาชีพด้านเทคโนโลยีแบบ Interactive Console Game ที่ใช้ **Binary Decision Tree** ในการนำทางผู้เล่นผ่านคำถาม Yes/No เพื่อทำนายอาชีพที่เหมาะสม โปรแกรมสามารถ **เรียนรู้อาชีพใหม่** จากผู้เล่นได้ และ **บันทึกความรู้** ลงไฟล์เพื่อใช้ในครั้งถัดไป
+**The Career Path Oracle** เป็นเครื่องมือแนะนำอาชีพด้านเทคโนโลยีแบบ Interactive Console Application ที่ใช้ **Binary Decision Tree** ในการนำทางผู้เล่นผ่านคำถาม Yes/No เพื่อแนะนำอาชีพที่เหมาะสม โปรแกรมมี 20 อาชีพ ครอบคลุมสาย Software, Infrastructure และ Hardware โดยแต่ละอาชีพมี description และ type (Uke/Seme)
 
 ### ฟีเจอร์หลักทั้งหมด
 
 | ฟีเจอร์ | รายละเอียด |
 |---------|-----------|
-| 🎯 **ทายอาชีพ** | ถามคำถาม Yes/No ไล่ไปตาม Decision Tree จนทายอาชีพได้ |
+| 🎯 **แนะนำอาชีพ** | ถามคำถาม Yes/No ไล่ไปตาม Decision Tree จนถึงอาชีพที่เหมาะสม |
 | ↩ **Undo (ย้อนกลับ)** | พิมพ์ `undo` หรือ `u` เพื่อกลับไปคำถามก่อนหน้า |
-| 🧠 **เรียนรู้อาชีพใหม่** | ถ้าทายผิด ผู้เล่นสอนอาชีพใหม่ให้โปรแกรม → Tree ขยายตัวอัตโนมัติ |
-| 💾 **บันทึก/โหลดจากไฟล์** | บันทึก Tree ลง `careers.txt` และโหลดกลับมาใช้ใหม่ได้ |
-| 📊 **สรุปผลท้ายเกม** | แสดงจำนวนรอบ, ทายถูก/ผิด, เส้นทางแต่ละรอบ, อาชีพใหม่ที่เรียนรู้ |
-| 🔄 **เล่นซ้ำได้** | จบแต่ละรอบแล้วเลือกเล่นต่อหรือจบเกมได้ |
+| 📊 **สรุปผลท้ายเกม** | แสดงจำนวนคำถามที่ตอบ, เส้นทางคำตอบ, และผลลัพธ์อาชีพ |
+| 🏷️ **Uke/Seme Type** | แต่ละอาชีพมี tag ว่าเป็นสาย Uke (gentle, supportive) หรือ Seme (strong, leader) |
 
 ---
 
-## 2. โครงสร้างข้อมูล (Data Structures) ที่ใช้ — 3 ชนิด
+## 2. โครงสร้างข้อมูล (Data Structures) ที่ใช้ — 2 ชนิด
 
 ### 2.1 Binary Decision Tree (โครงสร้างหลัก)
-- **Internal Node** = เก็บคำถาม Yes/No (เช่น "Do you prefer front-end?")
-- **Leaf Node** = เก็บชื่ออาชีพ (เช่น "Frontend Developer (React/Vue)")
-- ไล่จาก Root → ถามคำถาม → Yes ไปลูกซ้าย / No ไปลูกขวา → จนถึง Leaf = คำตอบ
+- **Internal Node** = เก็บคำถาม Yes/No (เช่น "Do you prefer building software and writing code?")
+- **Leaf Node** = เก็บชื่ออาชีพ + description + type (เช่น "Frontend Developer | Builds beautiful... | Uke")
+- ไล่จาก Root → ถามคำถาม → Yes ไปลูกซ้าย / No ไปลูกขวา → จนถึง Leaf = คำแนะนำ
 
 ```mermaid
 graph TD
-    A["Q: Prefer front-end?"] -->|Yes| B["Q: Artistic aesthetics?"]
-    A -->|No| C["Q: Work with data?"]
-    B -->|Yes| D["Q: Mobile apps?"]
-    B -->|No| E["Q: JavaScript daily?"]
-    D -->|Yes| F["🎯 Mobile UI Designer"]
-    D -->|No| G["🎯 UX/UI Designer"]
-    E -->|Yes| H["Q: React/Vue?"]
-    E -->|No| I["Q: Brand identities?"]
-    H -->|Yes| J["🎯 Frontend Developer"]
-    H -->|No| K["🎯 Web Developer"]
+    A["Q: Prefer building software?"] -->|Yes| B["Q: User-facing work?"]
+    A -->|No| C["Q: Digital systems?"]
+    B -->|Yes| D["Q: Building apps?"]
+    B -->|No| E["Q: Automating delivery?"]
+    D -->|Yes| F["Q: Real-world apps?"]
+    D -->|No| G["Q: ML models?"]
+    F -->|Yes| H["... → Frontend / Full Stack"]
+    F -->|No| I["... → Game Developer"]
 ```
 
 ### 2.2 Custom Stack — UndoStack (ย้อนกลับ)
 - ใช้ **Linked List** เป็นโครงสร้างภายใน (ไม่ใช้ `java.util.Stack`)
 - ทุกครั้งที่ตอบคำถาม → `push()` Node ปัจจุบันเข้า Stack
 - พิมพ์ `undo` → `pop()` เอา Node เก่ากลับมา แล้วถามใหม่
-
-### 2.3 Custom Singly Linked List — LearningLog (บันทึกการเรียนรู้)
-- ทุกครั้งที่ผู้เล่นสอนอาชีพใหม่ → เพิ่ม entry ลง Linked List
-- ท้ายเกมจะพิมพ์รายการอาชีพใหม่ทั้งหมดที่เรียนรู้ในเซสชันนี้
 
 ---
 
@@ -60,10 +52,13 @@ graph TD
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
-| `Node(String data)` | สร้างโหนดใหม่ เก็บ data, ยังไม่มีลูก |
+| `Node(String data)` | สร้าง question node (internal) เก็บคำถาม |
+| `Node(String data, String description, String type)` | สร้าง career node (leaf) เก็บชื่ออาชีพ, description, Uke/Seme |
 | `getData()` / `setData(String)` | อ่าน/เปลี่ยนข้อมูลของโหนด |
 | `getYesNode()` / `setYesNode(Node)` | อ่าน/กำหนดลูกฝั่ง Yes |
 | `getNoNode()` / `setNoNode(Node)` | อ่าน/กำหนดลูกฝั่ง No |
+| `getDescription()` / `setDescription(String)` | อ่าน/กำหนด description ของอาชีพ |
+| `getType()` / `setType(String)` | อ่าน/กำหนด type (Uke/Seme) |
 | `isLeaf()` | คืน `true` ถ้าไม่มีลูก (= เป็นอาชีพ, ไม่ใช่คำถาม) |
 
 **หลักการ:**
@@ -75,124 +70,65 @@ graph TD
 ### 3.2 [DecisionTree.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/DecisionTree.java) — จัดการ Binary Decision Tree
 
 > [!NOTE]
-> เป็น wrapper class ที่เก็บ root ของ Tree และมีเมธอดสำหรับ Dynamic Learning
+> เป็น wrapper class ที่เก็บ root ของ Tree
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
 | `DecisionTree(Node root)` | สร้าง Tree โดยรับ root node |
 | `getRoot()` / `setRoot(Node)` | อ่าน/กำหนด root ของ Tree |
-| `insertNewKnowledge(...)` | **เมธอดหลักสำหรับการเรียนรู้** — แปลง leaf เป็น question node |
-
-#### ⭐ insertNewKnowledge — หัวใจของการเรียนรู้
-
-```
-ก่อน: [Web Developer]  ← leaf node
-
-ผู้เล่นสอน: อาชีพจริงคือ "Game Developer"
-คำถามที่แยกได้: "Do you make interactive 3D experiences?"
-ตอบ yes → Game Developer
-
-หลัง:
-         [Do you make interactive 3D experiences?]
-        /                                        \
-  [Game Developer]                         [Web Developer]
-   (yes branch)                             (no branch)
-```
-
-**Parameters:**
-- `currentLeaf` — leaf node ที่ทายผิด (เช่น "Web Developer")
-- `newCareer` — อาชีพที่ถูกต้อง (เช่น "Game Developer")
-- `newQuestion` — คำถามที่แยก 2 อาชีพนี้ออกจากกัน
-- `isYesAnswerForNew` — ถ้า `true` → ตอบ yes ได้อาชีพใหม่, ตอบ no ได้อาชีพเดิม
 
 ---
 
-### 3.3 [DataLoader.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/DataLoader.java) — สร้าง Tree เริ่มต้น (30 อาชีพ)
+### 3.3 [DataLoader.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/DataLoader.java) — สร้าง Tree เริ่มต้น (20 อาชีพ)
 
 > [!NOTE]
-> สร้าง Decision Tree แบบ Hardcoded สำหรับใช้ครั้งแรกที่ยังไม่มีไฟล์ `careers.txt`
+> สร้าง Decision Tree แบบ Hardcoded ที่มี 20 อาชีพ ความลึก 7-10 ระดับ
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
-| `loadInitialTree()` | สร้างและคืน DecisionTree ที่มี 30 อาชีพ |
+| `loadInitialTree()` | สร้างและคืน DecisionTree ที่มี 20 อาชีพ |
 
 #### โครงสร้างสาขาหลักของ Tree:
 
 ```
-ROOT: "Prefer front-end over back-end?"
-├── YES → Frontend/Design Branch (6 อาชีพ)
-│   ├── Mobile UI Designer
-│   ├── UX/UI Designer
-│   ├── Frontend Developer (React/Vue)
-│   ├── Web Developer
-│   ├── Graphic Designer
-│   └── Product Designer
+ROOT: "Prefer building software and writing code over managing infrastructure?"
+├── YES → Software & Development (10 อาชีพ)
+│   ├── User-facing Branch
+│   │   ├── Frontend Developer [Uke]
+│   │   ├── Full Stack Developer [Seme]
+│   │   ├── Backend Developer [Seme]
+│   │   ├── Data Engineer [Seme]
+│   │   ├── Mobile Developer [Uke]
+│   │   ├── QA / Test Automation Engineer [Uke]
+│   │   ├── Game Developer [Seme]
+│   │   └── Business Intelligence (BI) Developer [Uke]
+│   │
+│   └── Behind-the-scenes Branch
+│       ├── AI / Machine Learning Engineer [Seme]
+│       ├── Data Scientist [Uke]
+│       ├── DevOps Engineer [Seme]
+│       └── (+ Full Stack / Backend via alt paths)
 │
-└── NO → Back-end/Other Branch
-    ├── Data Branch (5 อาชีพ)
-    │   ├── AI Research Scientist
-    │   ├── Machine Learning Engineer
-    │   ├── Data Analyst / BI Developer
-    │   ├── Database Administrator
-    │   └── Data Engineer
+└── NO → Infrastructure & Hardware (10 อาชีพ)
+    ├── Digital Infrastructure Branch
+    │   ├── Site Reliability Engineer (SRE) [Seme]
+    │   ├── System Engineer / Administrator [Seme]
+    │   ├── Cloud Engineer [Uke]
+    │   ├── Network Engineer [Uke]
+    │   ├── Cybersecurity Engineer / Pentester [Seme]
+    │   └── Blockchain Engineer [Seme]
     │
-    └── Engineering Branch (19 อาชีพ)
-        ├── DevOps Engineer
-        ├── Cloud Engineer / SysAdmin
-        ├── iOS Developer
-        ├── Android Developer
-        ├── Back-End Developer
-        ├── Full-Stack Developer
-        ├── Cybersecurity Engineer
-        ├── QA Engineer / SDET
-        ├── IT Project Manager
-        ├── Embedded Systems Engineer
-        ├── Technical Support Engineer
-        ├── Blockchain Developer
-        ├── Game Developer
-        ├── AR/VR Developer
-        ├── Cloud Architect
-        ├── Technical Writer
-        ├── Scrum Master
-        ├── Site Reliability Engineer (SRE)
-        └── Solutions Architect
+    └── Physical/Hardware Branch
+        ├── IoT Engineer [Uke]
+        ├── Embedded Systems Engineer [Seme]
+        └── Hardware Design Engineer [Seme]
 ```
 
-**รวม 30 อาชีพ** ครบตามข้อกำหนด
+**รวม 20 อาชีพ** ครบตามข้อกำหนด
 
 ---
 
-### 3.4 [FileManager.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/FileManager.java) — บันทึก/โหลด Tree จากไฟล์
-
-> [!NOTE]
-> ใช้ Pre-order Traversal ในการ Serialize/Deserialize Tree ลงไฟล์ `careers.txt`
-
-| ฟังก์ชัน | หน้าที่ |
-|---------|--------|
-| `hasSavedData()` | ตรวจว่ามีไฟล์ `careers.txt` อยู่หรือไม่ |
-| `saveTree(Node root)` | บันทึก Tree ทั้งต้นลงไฟล์ |
-| `loadTree()` | อ่านไฟล์แล้วสร้าง Tree กลับมา |
-| `writePreOrder(Node, FileWriter)` | เขียนแบบ Pre-order (recursive) |
-| `readPreOrder(Scanner)` | อ่านแบบ Pre-order (recursive) |
-
-#### รูปแบบไฟล์ careers.txt:
-```
-Q: Do you prefer working with visual interfaces (front-end) over back-end logic?
-Q: Do you care more about artistic aesthetics than technical precision?
-Q: Do you design mobile apps specifically?
-A: Mobile UI Designer
-A: UX/UI Designer
-Q: Do you enjoy writing JavaScript and CSS daily?
-...
-```
-
-- บรรทัดที่ขึ้นต้นด้วย `Q:` = คำถาม (Internal Node)
-- บรรทัดที่ขึ้นต้นด้วย `A:` = อาชีพ (Leaf Node)
-- ลำดับเป็น **Pre-order** (Root → Yes-subtree → No-subtree)
-
----
-
-### 3.5 [UndoStack.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/UndoStack.java) — Stack สำหรับ Undo
+### 3.4 [UndoStack.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/UndoStack.java) — Stack สำหรับ Undo
 
 > [!IMPORTANT]
 > เขียนเองทั้งหมดโดยใช้ Linked List ภายใน **ไม่ใช้ java.util.Stack**
@@ -203,98 +139,68 @@ Q: Do you enjoy writing JavaScript and CSS daily?
 | `pop()` | ดึง node บนสุดออก (เรียกเมื่อ user พิมพ์ undo) |
 | `peek()` | ดู node บนสุดโดยไม่ลบ |
 | `isEmpty()` | ตรวจว่า stack ว่างหรือไม่ |
-| `clear()` | ล้าง stack ทั้งหมด (เรียกตอนเริ่มรอบใหม่) |
+| `clear()` | ล้าง stack ทั้งหมด |
 | `getSize()` | คืนจำนวน element ใน stack |
 
 #### ตัวอย่างการทำงาน Undo:
 ```
-คำถาม 1: "Prefer front-end?" → ตอบ yes → push(คำถาม 1)
-คำถาม 2: "Artistic aesthetics?" → ตอบ no → push(คำถาม 2)
-คำถาม 3: "JavaScript daily?" → พิมพ์ undo!
-  → pop() → กลับไปคำถาม 2: "Artistic aesthetics?"
+คำถาม 1: "Prefer building software?" → ตอบ yes → push(คำถาม 1)
+คำถาม 2: "User-facing work?" → ตอบ no → push(คำถาม 2)
+คำถาม 3: "Automating delivery?" → พิมพ์ undo!
+  → pop() → กลับไปคำถาม 2: "User-facing work?"
 ```
 
 ---
 
-### 3.6 [LearningLog.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/LearningLog.java) — Linked List บันทึกการเรียนรู้
-
-> [!IMPORTANT]
-> เขียนเองทั้งหมดโดยใช้ Singly Linked List **ไม่ใช้ java.util.LinkedList**
-
-| ฟังก์ชัน | หน้าที่ |
-|---------|--------|
-| `addEntry(newCareer, oldCareer, question, answeredYes)` | เพิ่ม entry ท้ายลิสต์ |
-| `printLog()` | พิมพ์รายการทั้งหมดแบบ formatted |
-| `isEmpty()` | ตรวจว่าลิสต์ว่างหรือไม่ |
-| `getSize()` | คืนจำนวน entry |
-
-#### ตัวอย่าง Output ของ printLog():
-```
-  [1] Game Developer  |  "Do you make interactive 3D experiences?"
-        |  yes → Game Developer,  no → AR/VR Developer
-```
-
----
-
-### 3.7 [GameEngine.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/GameEngine.java) — ศูนย์กลาง Game Loop
+### 3.5 [GameEngine.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/GameEngine.java) — ศูนย์กลางการแนะนำอาชีพ
 
 > [!NOTE]
-> ไฟล์ที่ใหญ่ที่สุด เป็นตัวควบคุมการเล่นเกมทั้งหมด
+> ไฟล์ที่ควบคุม flow ทั้งหมด ตั้งแต่ welcome จนถึง farewell
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
-| `start()` | **เมธอดหลัก** — แสดง Welcome, เข้า game loop, จบด้วย summary + save |
-| `printWelcome()` | พิมพ์แบนเนอร์ต้อนรับ |
-| `playRound()` | **เล่น 1 รอบ** — ถามคำถาม, undo, ทาย, เรียนรู้ |
-| `extractKeyword(String)` | สกัดคำสำคัญจากคำถามเพื่อใช้แสดงเส้นทาง |
-| `printSummary()` | พิมพ์สรุปผลท้ายเกม |
-| `saveAndExit()` | บันทึก Tree + ข้อความลาก่อน |
+| `start()` | **เมธอดหลัก** — แสดง Welcome → navigate → แสดงผล → สรุป → จบ |
+| `printWelcome()` | พิมพ์แบนเนอร์ต้อนรับ + คำแนะนำการใช้งาน |
+| `navigate()` | **นำทาง Tree** — ถามคำถาม, รับ input, undo, เลื่อนไปลูก Yes/No |
+| `printResult(Node)` | แสดงอาชีพที่แนะนำ + description + type แบบ word-wrapped |
+| `printWrapped(text, width, prefix)` | ตัดบรรทัดข้อความให้พอดีความกว้าง |
+| `printSummary(Node)` | พิมพ์สรุปคำตอบทั้งหมด + ผลลัพธ์ |
+| `shortenQuestion(String)` | ย่อคำถามให้สั้นลงสำหรับ summary |
+| `saveAndExit()` | พิมพ์ข้อความลาก่อน |
 
 #### Flow ของ start():
 ```
-1. printWelcome()
-2. loop:
-   a. playRound()
-   b. ถาม "Play again?"
-      → yes: วนรอบใหม่
-      → no: ออก loop
-3. printSummary()
-4. saveAndExit()
+1. printWelcome()       → แสดง banner + instructions
+2. navigate()           → ถาม Q1, Q2, Q3... จนถึง leaf
+3. printResult(career)  → แสดงอาชีพที่แนะนำ + description
+4. printSummary(career) → สรุปคำตอบทั้งหมด
+5. saveAndExit()        → ข้อความลาก่อน
 ```
 
-#### Flow ของ playRound():
+#### Flow ของ navigate():
 ```
-1. เริ่มจาก root, ล้าง undoStack
+1. เริ่มจาก root
 2. วน loop ตราบที่ยังไม่ถึง leaf:
-   - แสดงคำถาม
+   - แสดงคำถาม (Q1. Q2. ...)
    - รับ input:
-     • "yes"/"y" → push ลง stack, ไปลูก yes
-     • "no"/"n"  → push ลง stack, ไปลูก no
+     • "yes"/"y" → push ลง stack, บันทึกคำตอบ, ไปลูก yes
+     • "no"/"n"  → push ลง stack, บันทึกคำตอบ, ไปลูก no
      • "undo"/"u" → pop จาก stack กลับไปคำถามก่อนหน้า
      • อื่นๆ → แจ้งข้อผิดพลาด ถามใหม่
-3. ถึง leaf → ทายอาชีพ:
-   • ทายถูก → correctGuesses++
-   • ทายผิด → ถามอาชีพจริง + คำถามแยก → insertNewKnowledge() + addEntry() ใน LearningLog
-4. บันทึกเส้นทาง (path) ของรอบนี้
+3. ถึง leaf → return career node
 ```
 
 ---
 
-### 3.8 [Main.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/Main.java) — จุดเริ่มต้นโปรแกรม
+### 3.6 [Main.java](file:///d:/KMUTT/1-2/CPE%20121/M3/Project/Main.java) — จุดเริ่มต้นโปรแกรม
 
 | ฟังก์ชัน | หน้าที่ |
 |---------|--------|
-| `main(String[] args)` | โหลด Tree → สร้าง GameEngine → เริ่มเกม |
+| `main(String[] args)` | โหลด Tree จาก DataLoader → สร้าง GameEngine → เริ่มเกม |
 
 #### Logic:
 ```java
-if (FileManager.hasSavedData()) {
-    // มีไฟล์ careers.txt → โหลดจากไฟล์
-    careerTree = FileManager.loadTree();
-} else {
-    // ไม่มีไฟล์ → ใช้ DataLoader สร้าง Tree เริ่มต้น 30 อาชีพ
-    careerTree = DataLoader.loadInitialTree();
-}
+DecisionTree careerTree = DataLoader.loadInitialTree();
 GameEngine game = new GameEngine(careerTree);
 game.start();
 ```
@@ -303,59 +209,102 @@ game.start();
 
 ## 4. ตัวอย่างการใช้งานจริง
 
-### Scenario A: ทายถูกตั้งแต่แรก ✓
+### Scenario A: เล่นจนได้ผลลัพธ์ ✓
 ```
---- Round 1 ---
-Do you prefer working with visual interfaces (front-end) over back-end logic? (yes/no/undo): yes
-Do you care more about artistic aesthetics than technical precision? (yes/no/undo): no
-Do you enjoy writing JavaScript and CSS daily? (yes/no/undo): yes
-Do you work with frameworks like React or Vue? (yes/no/undo): yes
+==================================================
+  Welcome to The Career Path Oracle
+==================================================
+I will recommend a tech career path for you!
+Answer a series of yes/no questions about your
+interests and preferences.
 
-Is the career you're thinking of [Frontend Developer (React/Vue)]? (yes/no): yes
+  Controls:
+    yes / y  = Yes
+    no  / n  = No
+    undo / u = Go back to previous question
 
-✓ Correct! I guessed your career!
+  Each career is tagged as:
+    [Uke]  = the gentle, supportive type <3
+    [Seme] = the strong, leader type <3
+==================================================
+
+  Q1. Do you prefer building software and writing code over managing infrastructure and hardware?
+  >>> yes
+
+  Q2. Do you enjoy creating things that users directly see and interact with on screen?
+  >>> yes
+
+  Q3. Are you more passionate about building interactive applications than analyzing data and reports?
+  >>> yes
+
+  Q4. Do you prefer developing real-world applications over creating video games?
+  >>> yes
+
+  Q5. Do you prefer working with web technologies (HTML, CSS, JavaScript) over native mobile platforms?
+  >>> yes
+
+  Q6. Do you enjoy building complex UIs with modern frameworks like React, Vue, or Angular?
+  >>> yes
+
+  Q7. Do you specialize in creating responsive, accessible web interfaces?
+  >>> yes
+
+  Q8. Do you focus mainly on the browser side, leaving server-side logic to others?
+  >>> yes
+
+  ==================================================
+   YOUR RECOMMENDED CAREER PATH
+  ==================================================
+
+   >> Frontend Developer [Uke]
+
+   About this career:
+     Builds beautiful, responsive web interfaces
+     using HTML, CSS, and JavaScript with modern
+     frameworks like React or Vue. Focuses on user
+     experience, accessibility, and performance
+     in the browser.
+
+  ==================================================
 ```
 
 ### Scenario B: ใช้ Undo ↩
 ```
-Do you prefer working with visual interfaces (front-end) over back-end logic? (yes/no/undo): yes
-Do you care more about artistic aesthetics than technical precision? (yes/no/undo): yes
-Do you design mobile apps specifically? (yes/no/undo): undo
-↩ Undone! Back to previous question.
-Do you care more about artistic aesthetics than technical precision? (yes/no/undo): no
-...
+  Q1. Do you prefer building software and writing code over managing infrastructure and hardware?
+  >>> yes
+
+  Q2. Do you enjoy creating things that users directly see and interact with on screen?
+  >>> yes
+
+  Q3. Are you more passionate about building interactive applications than analyzing data and reports?
+  >>> undo
+  << Back to previous question.
+
+  Q2. Do you enjoy creating things that users directly see and interact with on screen?
+  >>> no
+  ...
 ```
 
-### Scenario C: สอนอาชีพใหม่ 🧠
+### Summary ท้ายเกม 📊
 ```
-Is the career you're thinking of [Web Developer]? (yes/no): no
+  =================== SUMMARY ====================
+  Questions answered: 8
 
-✗ I was wrong!
-What career were you thinking of? WordPress Developer
-What is a yes/no question that distinguishes [WordPress Developer] from [Web Developer]? Do you specialize in WordPress and CMS platforms?
-For [WordPress Developer], is the answer to that question yes or no? yes
+  Your answers:
+    1. [Y] Prefer building software and writing code over managing inf...
+    2. [Y] Enjoy creating things that users directly see and interact ...
+    3. [Y] More passionate about building interactive applications tha...
+    4. [Y] Prefer developing real-world applications over creating vid...
+    5. [Y] Prefer working with web technologies (HTML, CSS, JavaScript...
+    6. [Y] Enjoy building complex UIs with modern frameworks like Reac...
+    7. [Y] Specialize in creating responsive, accessible web interfaces?
+    8. [Y] Focus mainly on the browser side, leaving server-side logic...
 
-✓ Thanks! I've learned about [WordPress Developer].
-```
+  Result: Frontend Developer
+  Type  : Uke
+  ==================================================
 
-### Session Summary ท้ายเกม 📊
-```
-==================== SESSION SUMMARY ====================
-Total rounds played : 3
-Correct guesses     : 2 ✓
-Wrong guesses       : 1 ✗
-
-Path taken each round:
-  Round 1: visual→yes, aesthetic→no, javascript→yes, framework→yes  ✓ Frontend Developer (React/Vue)
-  Round 2: visual→no, data→yes, mlModels→no, visualize→yes  ✓ Data Analyst / BI Developer
-  Round 3: visual→no, data→no, infra→no, coreLogic→no, ...  ✗ Web Developer (learned: WordPress Developer)
-
-New knowledge learned today:
-  [1] WordPress Developer  |  "Do you specialize in WordPress and CMS platforms?"
-        |  yes → WordPress Developer,  no → Web Developer
-=========================================================
-Knowledge base saved to careers.txt ✓
-Thanks for playing! Goodbye.
+  Thanks for using The Career Path Oracle! Goodbye.
 ```
 
 ---
@@ -368,7 +317,7 @@ java Main
 ```
 
 > [!TIP]
-> ครั้งแรกที่รันจะใช้ DataLoader (30 อาชีพ) → หลังจากเล่นจบจะสร้าง `careers.txt` → ครั้งต่อไปจะโหลดจากไฟล์โดยอัตโนมัติ (รวมอาชีพใหม่ที่เรียนรู้ด้วย)
+> โปรแกรมจะโหลด Decision Tree จาก DataLoader ที่มี 20 อาชีพ เล่นได้เลยทันทีไม่ต้องเตรียมไฟล์อะไร
 
 ---
 
@@ -376,20 +325,16 @@ java Main
 
 ```mermaid
 graph LR
-    Main["Main.java<br/>(Entry Point)"] --> FM["FileManager.java<br/>(Save/Load)"]
-    Main --> DL["DataLoader.java<br/>(Default Tree)"]
-    Main --> GE["GameEngine.java<br/>(Game Loop)"]
+    Main["Main.java<br/>(Entry Point)"] --> DL["DataLoader.java<br/>(Default Tree)"]
+    Main --> GE["GameEngine.java<br/>(Recommendation Flow)"]
     
-    FM --> DT["DecisionTree.java<br/>(Tree Logic)"]
-    DL --> DT
+    DL --> DT["DecisionTree.java<br/>(Tree Wrapper)"]
     GE --> DT
     
     GE --> US["UndoStack.java<br/>(Undo Feature)"]
-    GE --> LL["LearningLog.java<br/>(Learning Track)"]
     
     DT --> N["Node.java<br/>(Tree Node)"]
     US --> N
-    FM --> N
 ```
 
 ---
@@ -398,9 +343,8 @@ graph LR
 
 | # | Data Structure | ไฟล์ | วัตถุประสงค์ |
 |---|---------------|------|-------------|
-| 1 | **Binary Decision Tree** | Node.java + DecisionTree.java + DataLoader.java | โครงสร้างหลักสำหรับคำถาม-คำตอบ ทายอาชีพ |
+| 1 | **Binary Decision Tree** | Node.java + DecisionTree.java + DataLoader.java | โครงสร้างหลักสำหรับคำถาม-คำตอบ แนะนำอาชีพ |
 | 2 | **Custom Stack (Linked List)** | UndoStack.java | ย้อนกลับคำตอบ (Undo) ระหว่างเล่น |
-| 3 | **Custom Singly Linked List** | LearningLog.java | บันทึกอาชีพใหม่ที่เรียนรู้ในแต่ละเซสชัน |
 
 > [!IMPORTANT]
-> ทั้ง 3 โครงสร้างเขียนเอง 100% **ไม่มีการใช้ java.util.Stack, java.util.LinkedList, java.util.ArrayList** หรือ Collection class ใดๆ
+> ทั้ง 2 โครงสร้างเขียนเอง 100% **ไม่มีการใช้ java.util.Stack, java.util.LinkedList, java.util.ArrayList** หรือ Collection class ใดๆ
