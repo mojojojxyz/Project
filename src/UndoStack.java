@@ -1,28 +1,28 @@
 /**
- * Custom stack implementation using a linked list to support the "undo" feature.
- * Allows the player to go back to the previous question during gameplay.
+ * โครงสร้างข้อมูล Stack ที่สร้างเองโดยใช้ Linked List เพื่อรองรับฟีเจอร์ "ย้อนกลับ" (Undo)
+ * ช่วยให้ผู้เล่นสามารถย้อนกลับไปคำถามก่อนหน้าได้ระหว่างเล่นเกม
  *
- * This class is implemented from scratch without using java.util.Stack
- * to satisfy the project requirement of custom data structures.
+ * คลาสนี้สร้างขึ้นเองตั้งแต่ต้นโดยไม่ใช้ java.util.Stack
+ * เพื่อให้ตรงตามข้อกำหนดของโปรเจกต์ที่ต้องสร้างโครงสร้างข้อมูลเอง
  *
- * Operations: push(), pop(), peek(), isEmpty(), clear()
+ * การทำงานที่รองรับ: push(), pop(), peek(), isEmpty(), clear()
  */
 public class UndoStack {
     private StackNode top;
     private int size;
 
     /**
-     * Internal node class for the stack's linked list structure.
-     * Each node holds a reference to a tree Node (the question the player was at).
+     * คลาสโหนดภายในสำหรับโครงสร้าง Linked List ของ Stack
+     * แต่ละโหนดเก็บ reference ไปยัง Node ของต้นไม้ (คำถามที่ผู้เล่นอยู่)
      */
     private class StackNode {
         Node treeNode;
         StackNode next;
 
         /**
-         * Constructs a StackNode wrapping the given tree node.
+         * สร้าง StackNode ที่ห่อหุ้มโหนดต้นไม้ที่กำหนด
          *
-         * @param treeNode the decision tree node to store
+         * @param treeNode โหนดของ Decision Tree ที่จะเก็บ
          */
         public StackNode(Node treeNode) {
             this.treeNode = treeNode;
@@ -31,7 +31,7 @@ public class UndoStack {
     }
 
     /**
-     * Constructs an empty UndoStack.
+     * สร้าง UndoStack เปล่า
      */
     public UndoStack() {
         this.top = null;
@@ -39,10 +39,10 @@ public class UndoStack {
     }
 
     /**
-     * Pushes a tree node onto the top of the stack.
-     * Called before traversing to a child node so the player can undo.
+     * เพิ่มโหนดต้นไม้เข้าไปที่ด้านบนสุดของ Stack
+     * ถูกเรียกก่อนจะเดินไปยังโหนดลูก เพื่อให้ผู้เล่นสามารถย้อนกลับได้
      *
-     * @param node the tree node to save on the stack
+     * @param node โหนดต้นไม้ที่จะบันทึกลงใน Stack
      */
     public void push(Node node) {
         StackNode newNode = new StackNode(node);
@@ -52,10 +52,10 @@ public class UndoStack {
     }
 
     /**
-     * Removes and returns the tree node from the top of the stack.
-     * Used when the player types "undo" to return to the previous question.
+     * นำโหนดต้นไม้ออกจากด้านบนสุดของ Stack แล้วคืนค่ากลับมา
+     * ถูกใช้เมื่อผู้เล่นพิมพ์ "undo" เพื่อกลับไปยังคำถามก่อนหน้า
      *
-     * @return the most recently pushed tree node, or null if the stack is empty
+     * @return โหนดต้นไม้ที่ถูก push เข้ามาล่าสุด หรือ null ถ้า Stack ว่าง
      */
     public Node pop() {
         if (isEmpty()) {
@@ -68,9 +68,9 @@ public class UndoStack {
     }
 
     /**
-     * Returns the tree node at the top of the stack without removing it.
+     * คืนค่าโหนดต้นไม้ที่อยู่บนสุดของ Stack โดยไม่ลบออก
      *
-     * @return the top tree node, or null if the stack is empty
+     * @return โหนดต้นไม้ที่อยู่บนสุด หรือ null ถ้า Stack ว่าง
      */
     public Node peek() {
         if (isEmpty()) {
@@ -80,26 +80,26 @@ public class UndoStack {
     }
 
     /**
-     * Checks whether the stack is empty.
+     * ตรวจสอบว่า Stack ว่างหรือไม่
      *
-     * @return true if the stack has no elements
+     * @return true ถ้า Stack ไม่มีสมาชิก
      */
     public boolean isEmpty() {
         return top == null;
     }
 
     /**
-     * Returns the number of elements currently in the stack.
+     * คืนค่าจำนวนสมาชิกที่อยู่ใน Stack ในปัจจุบัน
      *
-     * @return the stack size
+     * @return ขนาดของ Stack
      */
     public int getSize() {
         return size;
     }
 
     /**
-     * Removes all elements from the stack, resetting it to empty.
-     * Called at the start of each new round.
+     * ลบสมาชิกทั้งหมดออกจาก Stack ทำให้กลับเป็นสถานะว่าง
+     * ถูกเรียกเมื่อเริ่มรอบใหม่
      */
     public void clear() {
         top = null;

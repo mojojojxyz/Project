@@ -1,24 +1,24 @@
 /**
- * Entry point for The Career Path Oracle application.
- * Loads the decision tree from the hardcoded DataLoader,
- * then starts the game engine.
+ * จุดเริ่มต้นของแอปพลิเคชัน The Career Path Oracle
+ * โหลด Decision Tree จาก DataLoader ที่กำหนดไว้
+ * จากนั้นเริ่มทำงานผ่าน GameEngine
  *
- * Compile and run:
+ * วิธีคอมไพล์และรัน:
  *   javac *.java
  *   java Main
  */
 public class Main {
 
     /**
-     * Main method — initializes the decision tree and starts the game.
+     * เมธอดหลัก — สร้าง Decision Tree และเริ่มเกม
      *
-     * @param args command-line arguments (not used)
+     * @param args อาร์กิวเมนต์จาก command-line (ไม่ได้ใช้งาน)
      */
     public static void main(String[] args) {
         DecisionTree careerTree = DataLoader.loadInitialTree();
         System.out.println("(Loaded default knowledge base with 20 careers)");
 
-        // Start the game
+        // เริ่มเกม
         GameEngine game = new GameEngine(careerTree);
         game.start();
     }

@@ -1,19 +1,19 @@
 /**
- * Represents a single node in the Binary Decision Tree.
- * Internal nodes hold Yes/No questions; leaf nodes hold a career name,
- * description, and type (เคะ/เมะ).
+ * แทนโหนดหนึ่งตัวใน Binary Decision Tree
+ * โหนดภายใน (Internal Node) เก็บคำถาม Yes/No
+ * โหนดใบ (Leaf Node) เก็บชื่ออาชีพ, คำอธิบาย, และประเภท (เคะ/เมะ)
  */
 public class Node {
     private String data;
     private Node yesNode;
     private Node noNode;
     private String description;
-    private String type; // "เคะ" or "เมะ" for leaf nodes
+    private String type; // "เคะ" หรือ "เมะ" สำหรับโหนดใบ
 
     /**
-     * Constructs a question (internal) node with only data.
+     * สร้างโหนดคำถาม (โหนดภายใน) โดยระบุแค่ข้อมูลคำถาม
      *
-     * @param data the question text
+     * @param data ข้อความคำถาม
      */
     public Node(String data) {
         this.data = data;
@@ -24,11 +24,11 @@ public class Node {
     }
 
     /**
-     * Constructs a career (leaf) node with data, description, and type.
+     * สร้างโหนดอาชีพ (โหนดใบ) พร้อมข้อมูล, คำอธิบาย, และประเภท
      *
-     * @param data        the career name
-     * @param description short description of the career
-     * @param type        "เคะ" or "เมะ"
+     * @param data        ชื่ออาชีพ
+     * @param description คำอธิบายสั้นๆ ของอาชีพ
+     * @param type        "เคะ" หรือ "เมะ"
      */
     public Node(String data, String description, String type) {
         this.data = data;
@@ -38,40 +38,40 @@ public class Node {
         this.type = type;
     }
 
-    /** @return the question or career name */
+    /** @return คำถามหรือชื่ออาชีพ */
     public String getData() { return data; }
 
-    /** @param data the new question or career name */
+    /** @param data คำถามหรือชื่ออาชีพใหม่ */
     public void setData(String data) { this.data = data; }
 
-    /** @return the yes-branch child node */
+    /** @return โหนดลูกฝั่ง Yes */
     public Node getYesNode() { return yesNode; }
 
-    /** @param yesNode the node to set as the yes-child */
+    /** @param yesNode โหนดที่จะตั้งเป็นลูกฝั่ง Yes */
     public void setYesNode(Node yesNode) { this.yesNode = yesNode; }
 
-    /** @return the no-branch child node */
+    /** @return โหนดลูกฝั่ง No */
     public Node getNoNode() { return noNode; }
 
-    /** @param noNode the node to set as the no-child */
+    /** @param noNode โหนดที่จะตั้งเป็นลูกฝั่ง No */
     public void setNoNode(Node noNode) { this.noNode = noNode; }
 
-    /** @return career description (leaf nodes only) */
+    /** @return คำอธิบายอาชีพ (เฉพาะโหนดใบ) */
     public String getDescription() { return description; }
 
-    /** @param description the career description */
+    /** @param description คำอธิบายอาชีพ */
     public void setDescription(String description) { this.description = description; }
 
-    /** @return "เคะ" or "เมะ" (leaf nodes only) */
+    /** @return "เคะ" หรือ "เมะ" (เฉพาะโหนดใบ) */
     public String getType() { return type; }
 
-    /** @param type "เคะ" or "เมะ" */
+    /** @param type "เคะ" หรือ "เมะ" */
     public void setType(String type) { this.type = type; }
 
     /**
-     * A leaf node has no children and represents a career answer.
+     * โหนดใบคือโหนดที่ไม่มีลูก และเป็นคำตอบ (อาชีพ)
      *
-     * @return true if this node has no children
+     * @return true ถ้าโหนดนี้ไม่มีลูก
      */
     public boolean isLeaf() {
         return yesNode == null && noNode == null;

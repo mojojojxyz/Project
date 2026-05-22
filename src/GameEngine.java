@@ -1,24 +1,24 @@
 import java.util.Scanner;
 
 /**
- * Career recommendation engine for The Career Path Oracle.
- * Guides the user through Yes/No questions, supports undo,
- * and displays a detailed career recommendation at the end.
- * Single round only, no learning/teaching feature.
+ * เครื่องมือแนะนำอาชีพสำหรับ The Career Path Oracle
+ * นำทางผู้ใช้ผ่านคำถาม Yes/No รองรับการย้อนกลับ (Undo)
+ * และแสดงรายละเอียดอาชีพที่แนะนำเมื่อจบ
+ * เล่นได้รอบเดียว ไม่มีฟีเจอร์เรียนรู้/สอน
  */
 public class GameEngine {
     private DecisionTree tree;
     private Scanner scanner;
     private UndoStack undoStack;
 
-    /** Track answers for summary */
+    /** เก็บคำตอบเพื่อสรุปผล */
     private String[] questions;
     private String[] answers;
     private int stepCount;
 
     /**
-     * Constructs a GameEngine with the given decision tree.
-     * @param tree the DecisionTree to use
+     * สร้าง GameEngine ด้วย Decision Tree ที่กำหนด
+     * @param tree DecisionTree ที่จะใช้งาน
      */
     public GameEngine(DecisionTree tree) {
         this.tree = tree;
@@ -30,7 +30,7 @@ public class GameEngine {
     }
 
     /**
-     * Starts the career recommendation flow.
+     * เริ่มกระบวนการแนะนำอาชีพ
      */
     public void start() {
         printWelcome();
@@ -41,7 +41,7 @@ public class GameEngine {
     }
 
     /**
-     * Prints the welcome banner.
+     * แสดงข้อความต้อนรับ
      */
     private void printWelcome() {
         System.out.println("==================================================");
@@ -64,10 +64,10 @@ public class GameEngine {
     }
 
     /**
-     * Navigates the decision tree by asking questions.
-     * Supports undo via UndoStack.
+     * นำทางใน Decision Tree โดยถามคำถามผู้ใช้
+     * รองรับการย้อนกลับผ่าน UndoStack
      *
-     * @return the leaf Node (career) reached
+     * @return โหนดใบ (อาชีพ) ที่ไปถึง
      */
     private Node navigate() {
         Node current = tree.getRoot();
@@ -112,8 +112,8 @@ public class GameEngine {
     }
 
     /**
-     * Displays the career recommendation with full details.
-     * @param career the career leaf node
+     * แสดงผลอาชีพที่แนะนำพร้อมรายละเอียดทั้งหมด
+     * @param career โหนดใบของอาชีพ
      */
     private void printResult(Node career) {
         String type = career.getType();
@@ -130,7 +130,7 @@ public class GameEngine {
         System.out.println("   >> " + career.getData() + typeLabel);
         System.out.println();
 
-        // Word-wrap the description at ~60 chars
+        // ตัดคำอธิบายให้พอดีบรรทัดที่ ~60 ตัวอักษร
         String desc = career.getDescription();
         if (desc != null && !desc.isEmpty()) {
             System.out.println("   About this career:");
@@ -142,10 +142,10 @@ public class GameEngine {
     }
 
     /**
-     * Prints text wrapped at the given width with a prefix on each line.
-     * @param text   the text to wrap
-     * @param width  max characters per line
-     * @param prefix prefix for each line
+     * แสดงข้อความโดยตัดบรรทัดตามความกว้างที่กำหนด พร้อมเติมคำนำหน้าในแต่ละบรรทัด
+     * @param text   ข้อความที่จะตัดบรรทัด
+     * @param width  จำนวนตัวอักษรสูงสุดต่อบรรทัด
+     * @param prefix คำนำหน้าในแต่ละบรรทัด
      */
     private void printWrapped(String text, int width, String prefix) {
         String[] words = text.split(" ");
@@ -166,8 +166,8 @@ public class GameEngine {
     }
 
     /**
-     * Prints a summary of all answers given and the final result.
-     * @param career the recommended career
+     * แสดงสรุปคำตอบทั้งหมดที่ตอบไปและผลลัพธ์สุดท้าย
+     * @param career อาชีพที่แนะนำ
      */
     private void printSummary(Node career) {
         System.out.println();
@@ -189,22 +189,22 @@ public class GameEngine {
     }
 
     /**
-     * Shortens a question for the summary display.
-     * Removes "Do you" prefix and truncates if too long.
-     * @param question the full question text
-     * @return shortened version
+     * ย่อคำถามสำหรับแสดงในส่วนสรุป
+     * ตัดคำนำหน้า "Do you" ออก และตัดให้สั้นลงถ้ายาวเกินไป
+     * @param question ข้อความคำถามเต็ม
+     * @return คำถามที่ถูกย่อแล้ว
      */
     private String shortenQuestion(String question) {
         String q = question;
-        // Remove common prefixes
+        // ตัดคำนำหน้าที่พบบ่อยออก
         if (q.startsWith("Do you ")) q = q.substring(7);
         else if (q.startsWith("Are you ")) q = q.substring(8);
         else if (q.startsWith("Does your ")) q = q.substring(10);
-        // Capitalize first letter
+        // แปลงตัวอักษรแรกเป็นตัวพิมพ์ใหญ่
         if (q.length() > 0) {
             q = q.substring(0, 1).toUpperCase() + q.substring(1);
         }
-        // Truncate if too long
+        // ตัดให้สั้นลงถ้ายาวเกินไป
         if (q.length() > 70) {
             q = q.substring(0, 67) + "...";
         }
@@ -212,7 +212,7 @@ public class GameEngine {
     }
 
     /**
-     * Prints farewell message.
+     * แสดงข้อความอำลา
      */
     private void saveAndExit() {
         System.out.println();

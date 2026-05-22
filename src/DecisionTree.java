@@ -1,20 +1,20 @@
 /**
- * Manages the Binary Decision Tree for career prediction.
+ * จัดการ Binary Decision Tree สำหรับทำนายอาชีพ
  */
 public class DecisionTree {
     private Node root;
 
     /**
-     * Constructs a DecisionTree with the given root node.
-     * @param root the root node
+     * สร้าง DecisionTree โดยระบุโหนดรากที่กำหนดให้
+     * @param root โหนดราก
      */
     public DecisionTree(Node root) {
         this.root = root;
     }
 
-    /** @return the root node */
+    /** @return โหนดราก */
     public Node getRoot() { return root; }
 
-    /** @param root the new root node */
+    /** @param root โหนดรากใหม่ */
     public void setRoot(Node root) { this.root = root; }
 }
